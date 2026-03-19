@@ -67,8 +67,8 @@ export const InteractiveDemo: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-full bg-slate-50 py-4 px-4 md:px-8">
-      <div className="max-w-6xl w-full bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row min-h-[600px] md:h-[700px]">
+    <div className="flex flex-col items-center justify-center min-h-full bg-slate-50 py-2 px-2 md:px-4">
+      <div className="max-w-7xl w-full bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row h-[calc(100vh-140px)] min-h-[700px]">
         
         {/* Left Panel: Navigation & Description */}
         <div className="w-full md:w-1/3 lg:w-1/4 bg-slate-900 text-white p-6 flex flex-col h-full shrink-0">
