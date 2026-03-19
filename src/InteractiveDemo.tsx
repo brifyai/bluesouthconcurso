@@ -172,7 +172,7 @@ function renderVisual(stepIndex: number) {
       );
     case 2: // Chat Interaction
       return (
-        <div className="w-full max-w-md bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden flex flex-col h-[500px]">
+        <div className="w-full max-w-md bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden flex flex-col h-[calc(100vh-280px)] min-h-[550px]">
             <div className="bg-[#075E54] p-4 text-white flex items-center shrink-0">
                 <div className="w-8 h-8 bg-slate-200 rounded-full mr-2" />
                 <span className="font-semibold">Bot Asistente</span>
@@ -247,7 +247,7 @@ function renderVisual(stepIndex: number) {
       );
     case 3: // Product AI Analysis
       return (
-        <div className="w-full max-w-md bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden flex flex-col h-[500px]">
+        <div className="w-full max-w-md bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden flex flex-col h-[calc(100vh-280px)] min-h-[550px]">
             <div className="bg-[#075E54] p-4 text-white flex items-center shrink-0">
                 <div className="w-8 h-8 bg-slate-200 rounded-full mr-2" />
                 <span className="font-semibold">Bot Asistente (IA)</span>
