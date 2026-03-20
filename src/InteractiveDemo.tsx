@@ -1,50 +1,54 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { QrCode, Smartphone, MessageCircle, CheckCircle, Database, ArrowRight, ScanLine, Loader2 } from 'lucide-react';
-
-import { Package } from 'lucide-react';
+import { QrCode, Smartphone, MessageCircle, CheckCircle, Database, ArrowRight, ScanLine, Loader2, Package } from 'lucide-react';
 
 const steps = [
   {
     id: 'start',
-    title: 'Paso 1: Inicio del Proceso',
+    title: 'Paso 1: Escanear QR',
     description: 'El usuario escanea un código QR ubicado en el punto de venta o material publicitario.',
     icon: <QrCode className="w-8 h-8 text-blue-500" />
   },
   {
     id: 'whatsapp',
-    title: 'Paso 2: Conexión Automática',
+    title: 'Paso 2: WhatsApp Automático',
     description: 'WhatsApp se abre automáticamente en el dispositivo del usuario sin necesidad de guardar el número.',
     icon: <Smartphone className="w-8 h-8 text-green-500" />
   },
   {
+    id: 'welcome',
+    title: 'Paso 3: Mensaje de Bienvenida',
+    description: 'El bot envía un banner o saludo de bienvenida al concurso.',
+    icon: <MessageCircle className="w-8 h-8 text-green-600" />
+  },
+  {
     id: 'chat',
-    title: 'Paso 3 & 4: Interacción y Datos',
-    description: 'El bot da la bienvenida y solicita Nombre, RUT y Mail. Una vez completado, pide foto del producto.',
+    title: 'Paso 4: Interacción del Usuario (Datos)',
+    description: 'El bot solicita Nombre, RUT y Mail. El teléfono se obtiene automáticamente de WhatsApp.',
     icon: <MessageCircle className="w-8 h-8 text-green-600" />
   },
   {
     id: 'product-ai',
-    title: 'Paso 5: Validación de Producto',
-    description: 'El usuario envía la foto del producto por WhatsApp. La IA lo reconoce, confirma el producto detectado, pregunta la cantidad comprada y luego solicita la boleta.',
+    title: 'Paso 5: Validación IA (Producto y Cantidad)',
+    description: 'El usuario envía foto del producto. La IA lo reconoce, valida y pregunta la cantidad comprada.',
     icon: <Package className="w-8 h-8 text-orange-500" />
   },
   {
     id: 'receipt-ai',
-    title: 'Paso 6: Validación de Boleta',
-    description: 'El usuario sube la boleta. Nuestra IA la procesa, valida y extrae datos clave (Monto, Fecha, N° Boleta, etc.).',
+    title: 'Paso 6: Filtro IA (Boleta)',
+    description: 'El usuario sube la boleta. La IA la procesa y extrae datos clave (Dirección, Monto, N° Boleta, Comuna, Fecha).',
     icon: <ScanLine className="w-8 h-8 text-purple-500" />
   },
   {
     id: 'success',
     title: 'Paso 7: Confirmación',
-    description: 'El usuario recibe un mensaje de éxito indicando que sus datos fueron procesados correctamente.',
+    description: 'El usuario recibe un mensaje de éxito indicando que sus datos fueron enviados correctamente a validación.',
     icon: <CheckCircle className="w-8 h-8 text-green-500" />
   },
   {
     id: 'sheets',
-    title: 'Paso 8: Respaldo en la Nube',
-    description: 'Se guardan en Google Sheets los datos solicitados: Mes, Fecha, Cliente, Marca, Producto, Código EAN, Monto Boleta, Monto Producto, Unidades y PVPO.',
+    title: 'Paso 8: Respaldo en Google Sheets',
+    description: 'Se guardan en Google Sheets todos los datos extraídos del proceso.',
     icon: <Database className="w-8 h-8 text-yellow-500" />
   }
 ];
@@ -56,7 +60,7 @@ export const InteractiveDemo: React.FC = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(prev => prev + 1);
     } else {
-        setCurrentStep(0); // Loop back or just stop
+      setCurrentStep(0);
     }
   };
 
@@ -68,7 +72,7 @@ export const InteractiveDemo: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-full bg-slate-50 py-2 px-2 md:px-4">
-      <div className="max-w-7xl w-full bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row h-[calc(100vh-140px)] min-h-[700px]">
+      <div className="max-w-6xl w-full bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row h-[calc(100vh-140px)] min-h-[700px]">
         
         {/* Left Panel: Navigation & Description */}
         <div className="w-full md:w-1/3 lg:w-1/4 bg-slate-900 text-white p-6 flex flex-col h-full shrink-0">
@@ -150,7 +154,7 @@ function renderVisual(stepIndex: number) {
                     className="absolute top-0 left-0 w-full h-1 bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)]"
                 />
             </div>
-            <p className="mt-4 text-slate-600 font-medium">Escaneando...</p>
+            <p className="mt-4 text-slate-600 font-medium">Escanea el código QR en el punto de venta</p>
         </div>
       );
     case 1: // WhatsApp Opens
@@ -170,7 +174,7 @@ function renderVisual(stepIndex: number) {
              </motion.div>
         </div>
       );
-    case 2: // Chat Interaction
+    case 2: // Welcome Message
       return (
         <div className="w-full max-w-md bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden flex flex-col h-[calc(100vh-280px)] min-h-[550px]">
             <div className="bg-[#075E54] p-4 text-white flex items-center shrink-0">
@@ -182,9 +186,37 @@ function renderVisual(stepIndex: number) {
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.2 }}
+                    className="bg-white p-3 rounded-lg rounded-tl-none self-start max-w-[90%] shadow-sm"
+                >
+                    <div className="font-bold text-green-700 mb-1">🎉 ¡Bienvenido al Concurso Bluesouth!</div>
+                    <div className="text-slate-700">Gracias por participar. Te guiaré paso a paso para completar tu registro.</div>
+                </motion.div>
+                <motion.div 
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 1.5 }}
                     className="bg-white p-2 rounded-lg rounded-tl-none self-start max-w-[85%] shadow-sm"
                 >
-                    Hola! 👋 Bienvenido. Para participar, por favor indícame tu Nombre.
+                    Para comenzar, por favor indícame tu <strong>Nombre</strong>.
+                </motion.div>
+            </div>
+        </div>
+      );
+    case 3: // Chat Interaction - Datos personales
+      return (
+        <div className="w-full max-w-md bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden flex flex-col h-[calc(100vh-280px)] min-h-[550px]">
+            <div className="bg-[#075E54] p-4 text-white flex items-center shrink-0">
+                <div className="w-8 h-8 bg-slate-200 rounded-full mr-2" />
+                <span className="font-semibold">Bot Asistente</span>
+            </div>
+            <div className="flex-1 bg-[#E5DDD5] p-6 space-y-3 overflow-y-auto flex flex-col scrollbar-hide text-sm sm:text-base">
+                <motion.div 
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="bg-white p-2 rounded-lg rounded-tl-none self-start max-w-[85%] shadow-sm"
+                >
+                    Hola! 👋 Para participar, por favor indícame tu <strong>Nombre</strong>.
                 </motion.div>
                 <motion.div 
                     initial={{ x: 20, opacity: 0 }}
@@ -200,7 +232,7 @@ function renderVisual(stepIndex: number) {
                     transition={{ delay: 1.8 }}
                     className="bg-white p-2 rounded-lg rounded-tl-none self-start max-w-[85%] shadow-sm"
                 >
-                    Mucho gusto Juan. Ahora, por favor ingresa tu RUT.
+                    Mucho gusto Juan. Ahora, por favor ingresa tu <strong>RUT</strong>.
                 </motion.div>
                 <motion.div 
                     initial={{ x: 20, opacity: 0 }}
@@ -216,7 +248,8 @@ function renderVisual(stepIndex: number) {
                     transition={{ delay: 3.4 }}
                     className="bg-white p-2 rounded-lg rounded-tl-none self-start max-w-[85%] shadow-sm"
                 >
-                    Gracias. ¿Cuál es tu mail (correo electrónico)?
+                    Gracias. ¿Cuál es tu <strong>Mail</strong> (correo electrónico)?
+                    <div className="text-[10px] text-slate-400 mt-1">📱 Teléfono obtenido automáticamente de WhatsApp</div>
                 </motion.div>
                 <motion.div 
                     initial={{ x: 20, opacity: 0 }}
@@ -226,37 +259,29 @@ function renderVisual(stepIndex: number) {
                 >
                     juan.perez@email.com
                 </motion.div>
-                <motion.div 
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 5.0 }}
-                    className="bg-white p-2 rounded-lg rounded-tl-none self-start max-w-[85%] shadow-sm"
-                >
-                    ¡Excelente! Ahora, por favor envía una foto del producto participante que compraste. 📷
-                </motion.div>
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 6.0 }}
-                    className="self-center mt-2 text-[10px] text-slate-500 bg-white/50 px-2 py-1 rounded-full"
-                >
-                    Esperando foto del producto...
-                </motion.div>
             </div>
         </div>
       );
-    case 3: // Product AI Analysis
+    case 4: // Product AI Analysis
       return (
         <div className="w-full max-w-md bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden flex flex-col h-[calc(100vh-280px)] min-h-[550px]">
             <div className="bg-[#075E54] p-4 text-white flex items-center shrink-0">
                 <div className="w-8 h-8 bg-slate-200 rounded-full mr-2" />
                 <span className="font-semibold">Bot Asistente (IA)</span>
             </div>
-            <div className="flex-1 bg-[#E5DDD5] p-6 space-y-4 overflow-y-auto flex flex-col scrollbar-hide text-sm sm:text-base">
+            <div className="flex-1 bg-[#E5DDD5] p-6 space-y-3 overflow-y-auto flex flex-col scrollbar-hide text-sm sm:text-base">
+                <motion.div 
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="bg-white p-2 rounded-lg rounded-tl-none self-start max-w-[90%] shadow-sm"
+                >
+                    ¡Excelente! Ahora, por favor envía una foto del <strong>producto participante</strong> que compraste. 📷
+                </motion.div>
                 <motion.div 
                     initial={{ x: 20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.2 }}
+                    transition={{ delay: 1.5 }}
                     className="bg-[#dcf8c6] p-2 rounded-lg rounded-tr-none self-end max-w-[60%] shadow-sm flex flex-col items-center"
                 >
                     <div className="w-full h-24 bg-slate-300 rounded mb-2 flex items-center justify-center overflow-hidden relative">
@@ -272,23 +297,23 @@ function renderVisual(stepIndex: number) {
                 <motion.div 
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 2.0 }}
-                    className="bg-white p-2 rounded-lg rounded-tl-none self-start max-w-[85%] shadow-sm"
+                    transition={{ delay: 3.0 }}
+                    className="bg-white p-2 rounded-lg rounded-tl-none self-start max-w-[90%] shadow-sm"
                 >
-                    🤖 IA: ¡Producto reconocido! He validado exitosamente el producto "Act II Mantequilla" en tu foto. ✅
+                    🤖 <strong>IA:</strong> ¡Producto reconocido! He validado exitosamente el producto <strong>ACT II Mantequilla</strong> en tu foto. ✅
                 </motion.div>
                 <motion.div 
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 3.5 }}
-                    className="bg-white p-2 rounded-lg rounded-tl-none self-start max-w-[85%] shadow-sm"
+                    transition={{ delay: 4.5 }}
+                    className="bg-white p-2 rounded-lg rounded-tl-none self-start max-w-[90%] shadow-sm"
                 >
-                    Y por favor, indícanos: ¿qué cantidad de este producto compraste? 🔢
+                    Y por favor, indícanos: ¿qué <strong>cantidad</strong> de este producto compraste? 🔢
                 </motion.div>
                 <motion.div 
                     initial={{ x: 20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 5.0 }}
+                    transition={{ delay: 6.0 }}
                     className="bg-[#dcf8c6] p-2 rounded-lg rounded-tr-none self-end max-w-[85%] shadow-sm"
                 >
                     Compré 2 unidades
@@ -296,23 +321,15 @@ function renderVisual(stepIndex: number) {
                 <motion.div 
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 6.5 }}
-                    className="bg-white p-2 rounded-lg rounded-tl-none self-start max-w-[85%] shadow-sm"
-                >
-                    Por último, por favor sube la foto de tu boleta para validar la compra. 🧾
-                </motion.div>
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
                     transition={{ delay: 7.5 }}
-                    className="self-center mt-2 text-[10px] text-slate-500 bg-white/50 px-2 py-1 rounded-full"
+                    className="bg-white p-2 rounded-lg rounded-tl-none self-start max-w-[90%] shadow-sm"
                 >
-                    Esperando archivo...
+                    Por último, por favor sube la foto de tu <strong>boleta</strong> para validar la compra. 🧾
                 </motion.div>
             </div>
         </div>
       );
-    case 4: // Receipt AI Analysis
+    case 5: // Receipt AI Analysis
       return (
         <div className="flex flex-col items-center">
             <div className="relative w-64 h-80 bg-white shadow-lg border border-slate-200 p-4 rotate-2">
@@ -323,7 +340,7 @@ function renderVisual(stepIndex: number) {
                     <div className="h-2 bg-slate-200 w-5/6 rounded" />
                     <motion.div 
                         initial={{ backgroundColor: "#e2e8f0" }}
-                        animate={{ backgroundColor: "#86efac" }} // Highlights green
+                        animate={{ backgroundColor: "#86efac" }}
                         transition={{ delay: 1.5, duration: 0.5 }}
                         className="h-4 w-1/2 self-end rounded mt-4" 
                     />
@@ -333,7 +350,7 @@ function renderVisual(stepIndex: number) {
                          transition={{ delay: 1.5 }}
                          className="absolute right-6 bottom-24 text-sm text-green-600 font-bold bg-green-100 px-2 py-1 rounded shadow-sm"
                     >
-                        $12.500
+                        $15.500
                     </motion.div>
                 </div>
                 
@@ -346,11 +363,14 @@ function renderVisual(stepIndex: number) {
             </div>
             <div className="mt-4 flex items-center space-x-2 text-purple-600 font-semibold">
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Analizando boleta...</span>
+                <span>Analizando boleta con IA...</span>
+            </div>
+            <div className="mt-2 text-xs text-slate-500 text-center">
+                Extrayendo: Dirección, Monto, N° Boleta, Comuna, Fecha
             </div>
         </div>
       );
-    case 5: // Success
+    case 6: // Success
       return (
         <div className="flex flex-col items-center justify-center h-full">
             <motion.div 
@@ -361,13 +381,17 @@ function renderVisual(stepIndex: number) {
             >
                 <CheckCircle className="w-16 h-16 text-green-600" />
             </motion.div>
-            <h3 className="text-xl font-bold text-slate-800">¡Datos Validados!</h3>
-            <p className="text-slate-500 text-center mt-2 px-8">La boleta es válida y la información ha sido extraída correctamente.</p>
+            <h3 className="text-2xl font-bold text-slate-800">¡Datos Enviados!</h3>
+            <p className="text-slate-500 text-center mt-2 px-8 max-w-md">
+                Tus datos han sido enviados correctamente a validación. 
+                <br /><br />
+                <span className="text-sm">Recibirás una confirmación por WhatsApp una vez que tu participación sea aprobada.</span>
+            </p>
         </div>
       );
-    case 6: // Google Sheets
+    case 7: // Google Sheets
       return (
-        <div className="w-full max-w-4xl bg-white rounded-lg shadow-xl overflow-hidden border border-slate-200">
+        <div className="w-full max-w-6xl bg-white rounded-lg shadow-xl overflow-hidden border border-slate-200">
             <div className="bg-green-600 p-4 flex items-center justify-between text-white">
                 <div className="flex items-center space-x-2">
                     <Database className="w-6 h-6" />
@@ -379,47 +403,59 @@ function renderVisual(stepIndex: number) {
                 <table className="w-full text-sm text-left">
                     <thead className="bg-slate-100 text-slate-600 border-b">
                         <tr>
-                            <th className="p-4 font-semibold whitespace-nowrap">Mes</th>
-                            <th className="p-4 font-semibold whitespace-nowrap">Fecha</th>
-                            <th className="p-4 font-semibold whitespace-nowrap">Cliente</th>
-                            <th className="p-4 font-semibold whitespace-nowrap">Marca</th>
-                            <th className="p-4 font-semibold whitespace-nowrap">Producto</th>
-                            <th className="p-4 font-semibold whitespace-nowrap">Código EAN</th>
-                            <th className="p-4 font-semibold whitespace-nowrap">Monto Boleta</th>
-                            <th className="p-4 font-semibold whitespace-nowrap">Monto Prod. Comprado</th>
-                            <th className="p-4 font-semibold whitespace-nowrap">Unidades Compradas</th>
-                            <th className="p-4 font-semibold whitespace-nowrap">PVPO</th>
+                            <th className="p-3 font-semibold whitespace-nowrap">Mes</th>
+                            <th className="p-3 font-semibold whitespace-nowrap">Fecha</th>
+                            <th className="p-3 font-semibold whitespace-nowrap">Nombre Cliente</th>
+                            <th className="p-3 font-semibold whitespace-nowrap">Rut Cliente</th>
+                            <th className="p-3 font-semibold whitespace-nowrap">Dirección</th>
+                            <th className="p-3 font-semibold whitespace-nowrap">Comuna</th>
+                            <th className="p-3 font-semibold whitespace-nowrap">N° Boleta</th>
+                            <th className="p-3 font-semibold whitespace-nowrap">Marca</th>
+                            <th className="p-3 font-semibold whitespace-nowrap">Producto</th>
+                            <th className="p-3 font-semibold whitespace-nowrap">Código EAN</th>
+                            <th className="p-3 font-semibold whitespace-nowrap">Monto Boleta</th>
+                            <th className="p-3 font-semibold whitespace-nowrap">Monto Prod. Comprado</th>
+                            <th className="p-3 font-semibold whitespace-nowrap">Unidades Compradas</th>
+                            <th className="p-3 font-semibold whitespace-nowrap">PVPO</th>
                         </tr>
                     </thead>
                     <tbody className="text-slate-700">
                         <tr className="border-b opacity-50">
-                            <td className="p-4 whitespace-nowrap">Octubre</td>
-                            <td className="p-4 whitespace-nowrap">10/10/23</td>
-                            <td className="p-4 whitespace-nowrap">María González</td>
-                            <td className="p-4 whitespace-nowrap">Act II</td>
-                            <td className="p-4 whitespace-nowrap">Mantequilla</td>
-                            <td className="p-4 whitespace-nowrap">CABRICARA161</td>
-                            <td className="p-4 whitespace-nowrap">$8.990</td>
-                            <td className="p-4 whitespace-nowrap">$1.600</td>
-                            <td className="p-4 whitespace-nowrap">1</td>
-                            <td className="p-4 whitespace-nowrap">$1.600</td>
+                            <td className="p-3 whitespace-nowrap">Octubre</td>
+                            <td className="p-3 whitespace-nowrap">10/10/2023</td>
+                            <td className="p-3 whitespace-nowrap">María González</td>
+                            <td className="p-3 whitespace-nowrap">15.234.567-8</td>
+                            <td className="p-3 whitespace-nowrap">Av. Providencia 1234</td>
+                            <td className="p-3 whitespace-nowrap">Providencia</td>
+                            <td className="p-3 whitespace-nowrap">45231</td>
+                            <td className="p-3 whitespace-nowrap font-semibold">ACT II</td>
+                            <td className="p-3 whitespace-nowrap">Mantequilla</td>
+                            <td className="p-3 whitespace-nowrap">76150230383</td>
+                            <td className="p-3 whitespace-nowrap">$8.990</td>
+                            <td className="p-3 whitespace-nowrap">$1.600</td>
+                            <td className="p-3 whitespace-nowrap">1</td>
+                            <td className="p-3 whitespace-nowrap">$1.600</td>
                         </tr>
-                         <motion.tr 
+                        <motion.tr 
                             initial={{ backgroundColor: "#f0fdf4", opacity: 0 }}
                             animate={{ backgroundColor: "#ffffff", opacity: 1 }}
                             transition={{ duration: 0.8 }}
                             className="border-b font-medium bg-yellow-50"
                         >
-                            <td className="p-4 whitespace-nowrap">Octubre</td>
-                            <td className="p-4 whitespace-nowrap">Hoy</td>
-                            <td className="p-4 whitespace-nowrap">Juan Pérez</td>
-                            <td className="p-4 whitespace-nowrap">Act II</td>
-                            <td className="p-4 whitespace-nowrap">Mantequilla</td>
-                            <td className="p-4 whitespace-nowrap font-bold text-blue-600">CABRICARA161</td>
-                            <td className="p-4 whitespace-nowrap">$15.990</td>
-                            <td className="p-4 whitespace-nowrap text-green-600">$3.200</td>
-                            <td className="p-4 whitespace-nowrap">2</td>
-                            <td className="p-4 whitespace-nowrap text-green-600">$1.600</td>
+                            <td className="p-3 whitespace-nowrap">Octubre</td>
+                            <td className="p-3 whitespace-nowrap">24/10/2023</td>
+                            <td className="p-3 whitespace-nowrap">Juan Pérez</td>
+                            <td className="p-3 whitespace-nowrap">18.123.456-7</td>
+                            <td className="p-3 whitespace-nowrap">Los Leones 456</td>
+                            <td className="p-3 whitespace-nowrap">Providencia</td>
+                            <td className="p-3 whitespace-nowrap font-bold text-blue-600">54829</td>
+                            <td className="p-3 whitespace-nowrap font-bold">ACT II</td>
+                            <td className="p-3 whitespace-nowrap">Mantequilla</td>
+                            <td className="p-3 whitespace-nowrap font-bold text-blue-600">76150230383</td>
+                            <td className="p-3 whitespace-nowrap">$15.500</td>
+                            <td className="p-3 whitespace-nowrap text-green-600 font-semibold">$3.200</td>
+                            <td className="p-3 whitespace-nowrap font-semibold">2</td>
+                            <td className="p-3 whitespace-nowrap text-green-600 font-semibold">$1.600</td>
                         </motion.tr>
                     </tbody>
                 </table>
