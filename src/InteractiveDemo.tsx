@@ -409,7 +409,9 @@ function renderVisual(stepIndex: number) {
                             <th className="p-3 font-semibold whitespace-nowrap">Rut Cliente</th>
                             <th className="p-3 font-semibold whitespace-nowrap">Dirección</th>
                             <th className="p-3 font-semibold whitespace-nowrap">Comuna</th>
+                            <th className="p-3 font-semibold whitespace-nowrap">Razón social</th>
                             <th className="p-3 font-semibold whitespace-nowrap">N° Boleta</th>
+                            <th className="p-3 font-semibold whitespace-nowrap">Hora</th>
                             <th className="p-3 font-semibold whitespace-nowrap">Marca</th>
                             <th className="p-3 font-semibold whitespace-nowrap">Producto</th>
                             <th className="p-3 font-semibold whitespace-nowrap">Código EAN</th>
@@ -427,7 +429,9 @@ function renderVisual(stepIndex: number) {
                             <td className="p-3 whitespace-nowrap">15.234.567-8</td>
                             <td className="p-3 whitespace-nowrap">Av. Providencia 1234</td>
                             <td className="p-3 whitespace-nowrap">Providencia</td>
+                            <td className="p-3 whitespace-nowrap">Supermercado Providencia SpA</td>
                             <td className="p-3 whitespace-nowrap">45231</td>
+                            <td className="p-3 whitespace-nowrap">12:45</td>
                             <td className="p-3 whitespace-nowrap font-semibold">ACT II</td>
                             <td className="p-3 whitespace-nowrap">Mantequilla</td>
                             <td className="p-3 whitespace-nowrap">76150230383</td>
@@ -448,7 +452,9 @@ function renderVisual(stepIndex: number) {
                             <td className="p-3 whitespace-nowrap">18.123.456-7</td>
                             <td className="p-3 whitespace-nowrap">Los Leones 456</td>
                             <td className="p-3 whitespace-nowrap">Providencia</td>
+                            <td className="p-3 whitespace-nowrap font-bold text-blue-600">Minimarket Los Leones Ltda.</td>
                             <td className="p-3 whitespace-nowrap font-bold text-blue-600">54829</td>
+                            <td className="p-3 whitespace-nowrap font-bold text-blue-600">16:30</td>
                             <td className="p-3 whitespace-nowrap font-bold">ACT II</td>
                             <td className="p-3 whitespace-nowrap">Mantequilla</td>
                             <td className="p-3 whitespace-nowrap font-bold text-blue-600">76150230383</td>
